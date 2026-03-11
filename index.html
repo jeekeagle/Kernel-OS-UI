@@ -3,610 +3,154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flow, Not Rules</title>
+  <title>Jeek's Digital Garden</title>
+  <meta name="description" content="A digital garden for thoughts, ideas, and explorations.">
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    /* === RESET & BASE === */
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    :root {
-      /* Colors - Bold Signal Theme */
-      --bg-primary: #0a0a0f;
-      --bg-secondary: #12121a;
-      --fg-primary: #f5f5f7;
-      --fg-secondary: #8a8a9a;
-      --accent: #ff6b35;
-      --accent-soft: rgba(255, 107, 53, 0.15);
-      --card-bg: rgba(255, 255, 255, 0.03);
-      --border: rgba(255, 255, 255, 0.08);
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/style.css">
 
-      /* Typography */
-      --font-display: 'Space Grotesk', 'Noto Sans SC', sans-serif;
-      --font-body: 'Noto Sans SC', 'Space Grotesk', sans-serif;
-
-      /* Spacing */
-      --space-xs: clamp(0.5rem, 1vw, 0.75rem);
-      --space-sm: clamp(0.75rem, 1.5vw, 1rem);
-      --space-md: clamp(1rem, 2vw, 1.5rem);
-      --space-lg: clamp(1.5rem, 3vw, 2.5rem);
-      --space-xl: clamp(2rem, 5vw, 4rem);
-      --space-2xl: clamp(3rem, 8vw, 6rem);
-    }
-
-    html {
-      font-size: 16px;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: var(--font-body);
-      background: var(--bg-primary);
-      color: var(--fg-primary);
-      line-height: 1.6;
-      overflow: hidden;
-    }
-
-    /* === SLIDE CONTAINER === */
-    .presentation {
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      overflow: hidden;
-      position: relative;
-    }
-
-    /* === SLIDE BASE === */
-    .slide {
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: var(--space-lg);
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.6s ease, visibility 0.6s ease;
-    }
-
-    .slide.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .slide-content {
-      max-width: clamp(280px, 80vw, 900px);
-      width: 100%;
-      text-align: center;
-    }
-
-    /* === TYPOGRAPHY === */
-    h1 {
-      font-family: var(--font-display);
-      font-size: clamp(2.5rem, 8vw, 5rem);
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      margin-bottom: var(--space-md);
-    }
-
-    h2 {
-      font-family: var(--font-display);
-      font-size: clamp(1.75rem, 5vw, 3rem);
-      font-weight: 600;
-      line-height: 1.2;
-      letter-spacing: -0.01em;
-      margin-bottom: var(--space-lg);
-    }
-
-    h3 {
-      font-family: var(--font-display);
-      font-size: clamp(1.25rem, 3vw, 1.75rem);
-      font-weight: 500;
-      margin-bottom: var(--space-sm);
-    }
-
-    p {
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      color: var(--fg-secondary);
-      max-width: 60ch;
-      margin: 0 auto;
-    }
-
-    .subtitle {
-      font-size: clamp(1.125rem, 2.5vw, 1.5rem);
-      font-weight: 300;
-      color: var(--fg-secondary);
-    }
-
-    /* === ACCENT ELEMENTS === */
-    .accent {
-      color: var(--accent);
-    }
-
-    .accent-line {
-      width: clamp(60px, 10vw, 120px);
-      height: 3px;
-      background: var(--accent);
-      margin: var(--space-lg) auto;
-    }
-
-    /* === CARDS === */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: clamp(12px, 2vw, 20px);
-      padding: var(--space-lg);
-      margin-bottom: var(--space-md);
-      backdrop-filter: blur(10px);
-    }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: var(--space-md);
-      width: 100%;
-      max-width: clamp(600px, 80vw, 800px);
-    }
-
-    /* === BIG NUMBER === */
-    .big-number {
-      font-family: var(--font-display);
-      font-size: clamp(4rem, 15vw, 10rem);
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-      opacity: 0.3;
-    }
-
-    /* === QUOTE === */
-    .quote {
-      font-size: clamp(1.25rem, 3vw, 2rem);
-      font-style: italic;
-      font-weight: 300;
-      color: var(--fg-primary);
-      position: relative;
-      padding: var(--space-lg);
-    }
-
-    .quote::before {
-      content: '"';
-      font-size: clamp(3rem, 8vw, 6rem);
-      color: var(--accent);
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0.5;
-      line-height: 1;
-    }
-
-    /* === CONTRAST BOX === */
-    .contrast-container {
-      display: flex;
-      gap: var(--space-lg);
-      width: 100%;
-      max-width: clamp(500px, 80vw, 800px);
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .contrast-box {
-      flex: 1;
-      min-width: 200px;
-      max-width: 350px;
-      padding: var(--space-lg);
-      border-radius: clamp(12px, 2vw, 20px);
-      text-align: left;
-    }
-
-    .contrast-box.old {
-      background: rgba(255, 100, 100, 0.08);
-      border: 1px solid rgba(255, 100, 100, 0.2);
-    }
-
-    .contrast-box.new {
-      background: var(--accent-soft);
-      border: 1px solid rgba(255, 107, 53, 0.3);
-    }
-
-    .contrast-box h4 {
-      font-family: var(--font-display);
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      margin-bottom: var(--space-sm);
-      display: flex;
-      align-items: center;
-      gap: var(--space-xs);
-    }
-
-    .contrast-box.old h4::before {
-      content: '✗';
-      color: #ff6464;
-    }
-
-    .contrast-box.new h4::before {
-      content: '→';
-      color: var(--accent);
-    }
-
-    .contrast-box ul {
-      list-style: none;
-      font-size: clamp(0.875rem, 1.5vw, 1rem);
-      color: var(--fg-secondary);
-    }
-
-    .contrast-box li {
-      margin-bottom: var(--space-xs);
-      padding-left: var(--space-md);
-      position: relative;
-    }
-
-    .contrast-box li::before {
-      content: '·';
-      position: absolute;
-      left: 0;
-      color: var(--fg-secondary);
-    }
-
-    /* === NAVIGATION === */
-    .nav-dots {
-      position: fixed;
-      bottom: var(--space-lg);
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: var(--space-sm);
-      z-index: 100;
-    }
-
-    .nav-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--border);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: none;
-    }
-
-    .nav-dot:hover,
-    .nav-dot.active {
-      background: var(--accent);
-      transform: scale(1.2);
-    }
-
-    .nav-hint {
-      position: fixed;
-      bottom: var(--space-xl);
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: clamp(0.75rem, 1.5vw, 0.875rem);
-      color: var(--fg-secondary);
-      opacity: 0.5;
-    }
-
-    /* === ANIMATIONS === */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-
-    .slide.active .reveal {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
-    .reveal-delay-4 { transition-delay: 0.4s; }
-    .reveal-delay-5 { transition-delay: 0.5s; }
-
-    /* === SLIDE SPECIFIC STYLES === */
-
-    /* Slide 1: Title */
-    .slide-title {
-      background:
-        radial-gradient(ellipse at 30% 20%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 80%, rgba(255, 107, 53, 0.05) 0%, transparent 40%),
-        var(--bg-primary);
-    }
-
-    /* Slide 2: Problem */
-    .slide-problem {
-      background: var(--bg-secondary);
-    }
-
-    /* Slide 3: Flow Concept */
-    .slide-flow {
-      background:
-        radial-gradient(circle at 50% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 60%),
-        var(--bg-primary);
-    }
-
-    /* Slide 4: Anchor */
-    .slide-anchor {
-      background: var(--bg-secondary);
-    }
-
-    /* Slide 5: Question */
-    .slide-question {
-      background:
-        linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, transparent 50%),
-        var(--bg-primary);
-    }
-
-    /* Slide 6: CTA */
-    .slide-cta {
-      background:
-        radial-gradient(ellipse at 50% 50%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
-        var(--bg-primary);
-    }
-
-    /* === REDUCED MOTION === */
-    @media (prefers-reduced-motion: reduce) {
-      .reveal {
-        opacity: 1;
-        transform: none;
-        transition: none;
-      }
-
-      .slide {
-        transition: opacity 0.3s ease;
-      }
-    }
-
-    /* === RESPONSIVE === */
-    @media (max-width: 600px) {
-      .contrast-container {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .contrast-box {
-        width: 100%;
-      }
-    }
-
-    @media (max-height: 600px) {
-      .slide {
-        padding: var(--space-md);
-      }
-
-      h1 {
-        font-size: clamp(1.75rem, 6vw, 3rem);
-      }
-
-      h2 {
-        font-size: clamp(1.25rem, 4vw, 2rem);
-      }
-    }
-  </style>
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌊</text></svg>">
 </head>
 <body>
-  <div class="presentation">
-    <!-- === SLIDE 1: TITLE === -->
-    <section class="slide slide-title active" data-slide="1">
-      <div class="slide-content">
-        <p class="subtitle reveal">A Philosophy for Living</p>
-        <h1 class="reveal reveal-delay-1">
-          <span class="accent">Flow</span>, Not Rules
-        </h1>
-        <div class="accent-line reveal reveal-delay-2"></div>
-        <p class="reveal reveal-delay-3">
-          放弃对每日微观行为的绝对控制<br>
-          转而依靠核心价值和流动来驱动生命
-        </p>
-      </div>
-    </section>
+  <div class="app">
+    <!-- === SIDEBAR NAVIGATION === -->
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">Jeek</div>
+      <div class="logo-subtitle">Digital Garden</div>
 
-    <!-- === SLIDE 2: THE PROBLEM === -->
-    <section class="slide slide-problem" data-slide="2">
-      <div class="slide-content">
-        <div class="big-number reveal">01</div>
-        <h2 class="reveal reveal-delay-1">Rules 的困境</h2>
-        <p class="reveal reveal-delay-2">
-          静态的框架，试图用有限的规则<br>
-          去覆盖无限变化的生活场景
-        </p>
-        <div class="accent-line reveal reveal-delay-3"></div>
-        <div class="card-grid reveal reveal-delay-4">
-          <div class="card">
-            <h3>注定撞墙</h3>
-            <p>当现实与规则不符，要么痛苦地强求，要么破功自责</p>
-          </div>
-          <div class="card">
-            <h3>僵化反应</h3>
-            <p>面对意外，规则无法给出最优解</p>
-          </div>
-        </div>
-      </div>
-    </section>
+      <nav class="nav">
+        <a href="#" class="nav-item active" data-page="home">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
+        </a>
+        <a href="#/slides" class="nav-item" data-page="slides">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span>Slides</span>
+        </a>
+        <a href="#/about" class="nav-item" data-page="about">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>About</span>
+        </a>
+      </nav>
 
-    <!-- === SLIDE 3: THE SHIFT === -->
-    <section class="slide slide-flow" data-slide="3">
-      <div class="slide-content">
-        <div class="big-number reveal">02</div>
-        <h2 class="reveal reveal-delay-1">转向 <span class="accent">Flow</span></h2>
-        <div class="quote reveal reveal-delay-2">
-          Flow 是动态的导航，不是静态的地图
-        </div>
-        <p class="reveal reveal-delay-3">
-          它承认外部环境永远在变<br>
-          人的状态、能量、资源也在变<br>
-          所以最优解是流动的，不是固定的
-        </p>
+      <div class="sidebar-footer">
+        <a href="https://github.com/jeekeagle" target="_blank">GitHub</a>
       </div>
-    </section>
+    </aside>
 
-    <!-- === SLIDE 4: THE ANCHOR === -->
-    <section class="slide slide-anchor" data-slide="4">
-      <div class="slide-content">
-        <div class="big-number reveal">03</div>
-        <h2 class="reveal reveal-delay-1">核心价值是锚点</h2>
-        <p class="reveal reveal-delay-2">
-          它不规定你怎么走<br>
-          但保证你不偏离方向
-        </p>
-        <div class="accent-line reveal reveal-delay-3"></div>
-        <p class="reveal reveal-delay-4" style="color: var(--fg-primary); font-weight: 500;">
-          像河流有河床<br>
-          水随地形而流，但总往低处去
-        </p>
-      </div>
-    </section>
+    <!-- === MOBILE MENU TOGGLE === -->
+    <button class="mobile-menu-toggle" id="menuToggle" aria-label="Toggle menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
 
-    <!-- === SLIDE 5: THE QUESTION === -->
-    <section class="slide slide-question" data-slide="5">
-      <div class="slide-content">
-        <h2 class="reveal">关键问题</h2>
-        <div class="contrast-container reveal reveal-delay-1">
-          <div class="contrast-box old">
-            <h4>Rules 模式</h4>
-            <ul>
-              <li>我的规则本上第3条怎么写的？</li>
-              <li>今天该完成哪些任务？</li>
-              <li>有没有违反我的计划？</li>
-            </ul>
-          </div>
-          <div class="contrast-box new">
-            <h4>Flow 模式</h4>
-            <ul>
-              <li>此刻什么最有意义？</li>
-              <li>我的能量在哪个方向？</li>
-              <li>什么选择服务于我的核心价值？</li>
-            </ul>
+    <!-- === MAIN CONTENT === -->
+    <main class="main">
+      <!-- === HOME PAGE === -->
+      <section class="page active" id="page-home">
+        <div class="content">
+          <header style="margin-bottom: var(--space-2xl);">
+            <h1 class="fade-in">Flow <span class="accent">Space</span></h1>
+            <p class="fade-in stagger-1" style="margin-top: var(--space-md);">
+              一个有机生长的数字空间，记录思考、探索和创造。
+            </p>
+          </header>
+
+          <!-- Timeline (dynamically loaded from posts/) -->
+          <div class="timeline fade-in stagger-2">
+            <!-- Articles will be loaded here by app.js -->
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- === SLIDE 6: CTA === -->
-    <section class="slide slide-cta" data-slide="6">
-      <div class="slide-content">
-        <h2 class="reveal">开始你的 <span class="accent">Flow</span></h2>
-        <div class="accent-line reveal reveal-delay-1"></div>
-        <p class="reveal reveal-delay-2">
-          一种更通透、也更具韧性的<br>
-          生命运行方式
-        </p>
-        <p class="reveal reveal-delay-3" style="margin-top: var(--space-lg); font-size: clamp(0.875rem, 1.5vw, 1rem);">
-          Flow, Not Rules
-        </p>
-      </div>
-    </section>
+      <!-- === SLIDES PAGE === -->
+      <section class="page" id="page-slides">
+        <div class="content">
+          <header style="margin-bottom: var(--space-xl);">
+            <h1>Slides</h1>
+            <p class="muted" style="margin-top: var(--space-sm);">
+              可视化的想法演示，点击进入全屏模式。
+            </p>
+          </header>
+
+          <div class="slides-grid">
+            <div class="slide-card" data-slide="flow-not-rules">
+              <div class="slide-card-preview">
+                <div class="slide-card-number">01</div>
+                <div class="slide-card-title">Flow, Not Rules</div>
+              </div>
+              <div class="slide-card-overlay">
+                <span class="slide-card-date">2024.03</span>
+                <span class="slide-card-slides">6 slides</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- === ABOUT PAGE === -->
+      <section class="page" id="page-about">
+        <div class="content">
+          <div class="about-content">
+            <div class="about-avatar">🌊</div>
+            <h1 class="about-name">Jeek</h1>
+            <p class="about-bio">
+              Builder, thinker, explorer.<br>
+              热爱构建、思考和探索。
+            </p>
+            <div class="about-links">
+              <a href="https://github.com/jeekeagle" target="_blank" class="about-link" title="GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- === ARTICLE PAGE (dynamically loaded) === -->
+      <section class="page" id="page-article">
+        <div class="content">
+          <div class="reading-progress">
+            <div class="reading-progress-bar" id="readingProgress"></div>
+          </div>
+
+          <article>
+            <header class="article-header">
+              <div class="article-meta">
+                <span class="article-date" id="articleDate"></span>
+                <span class="article-tag" id="articleTag"></span>
+              </div>
+              <h1 id="articleTitle"></h1>
+            </header>
+
+            <div class="article-content" id="articleContent">
+              <!-- Markdown content rendered here -->
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <!-- === NAVIGATION === -->
-  <nav class="nav-dots">
-    <button class="nav-dot active" data-slide="1" aria-label="Slide 1"></button>
-    <button class="nav-dot" data-slide="2" aria-label="Slide 2"></button>
-    <button class="nav-dot" data-slide="3" aria-label="Slide 3"></button>
-    <button class="nav-dot" data-slide="4" aria-label="Slide 4"></button>
-    <button class="nav-dot" data-slide="5" aria-label="Slide 5"></button>
-    <button class="nav-dot" data-slide="6" aria-label="Slide 6"></button>
-  </nav>
-  <p class="nav-hint">← → 空格 点击导航</p>
+  <!-- === SLIDE OVERLAY (fullscreen slides) === -->
+  <div id="slideOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: var(--bg-primary);">
+    <button id="closeSlides" style="position: absolute; top: 20px; right: 20px; background: var(--card-bg); border: 1px solid var(--border); color: var(--fg-primary); padding: 10px 20px; border-radius: 8px; cursor: pointer; z-index: 1001;">ESC 关闭</button>
+    <iframe id="slideFrame" style="width: 100%; height: 100%; border: none;"></iframe>
+  </div>
 
-  <script>
-    // === SLIDE NAVIGATION ===
-    const slides = document.querySelectorAll('.slide');
-    const dots = document.querySelectorAll('.nav-dot');
-    let currentSlide = 1;
-    const totalSlides = slides.length;
-
-    function goToSlide(num) {
-      if (num < 1) num = 1;
-      if (num > totalSlides) num = totalSlides;
-
-      slides.forEach(slide => slide.classList.remove('active'));
-      dots.forEach(dot => dot.classList.remove('active'));
-
-      document.querySelector(`[data-slide="${num}"]`).classList.add('active');
-      document.querySelector(`.nav-dot[data-slide="${num}"]`).classList.add('active');
-
-      currentSlide = num;
-    }
-
-    function nextSlide() {
-      if (currentSlide < totalSlides) {
-        goToSlide(currentSlide + 1);
-      }
-    }
-
-    function prevSlide() {
-      if (currentSlide > 1) {
-        goToSlide(currentSlide - 1);
-      }
-    }
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === ' ') {
-        e.preventDefault();
-        nextSlide();
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        prevSlide();
-      }
-    });
-
-    // Click navigation
-    dots.forEach(dot => {
-      dot.addEventListener('click', () => {
-        goToSlide(parseInt(dot.dataset.slide));
-      });
-    });
-
-    // Touch/Swipe support
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    document.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    });
-
-    document.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    });
-
-    function handleSwipe() {
-      const threshold = 50;
-      const diff = touchStartX - touchEndX;
-
-      if (Math.abs(diff) > threshold) {
-        if (diff > 0) {
-          nextSlide();
-        } else {
-          prevSlide();
-        }
-      }
-    }
-
-    // Mouse wheel navigation
-    let wheelTimeout;
-    document.addEventListener('wheel', (e) => {
-      clearTimeout(wheelTimeout);
-      wheelTimeout = setTimeout(() => {
-        if (e.deltaY > 0) {
-          nextSlide();
-        } else {
-          prevSlide();
-        }
-      }, 50);
-    }, { passive: true });
-  </script>
+  <!-- === SCRIPTS === -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="assets/js/app.js"></script>
 </body>
 </html>
