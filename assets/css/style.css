@@ -532,28 +532,30 @@ strong {
   text-align: center;
   max-width: 500px;
   margin: 0 auto;
-  padding-top: var(--space-2xl);
+  padding-top: var(--space-lg);
 }
 
 .about-avatar {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background: var(--accent-soft);
-  margin: 0 auto var(--space-lg);
+  margin: 0 auto var(--space-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
 .about-name {
   margin-bottom: var(--space-xs);
+  font-size: clamp(1.5rem, 3vw, 2rem);
 }
 
 .about-bio {
   color: var(--fg-secondary);
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-md);
+  font-size: 0.9rem;
 }
 
 .about-links {
@@ -587,8 +589,8 @@ strong {
 
 /* === KOU SECTION (About Page) === */
 .kou-section {
-  margin-top: var(--space-2xl);
-  padding-top: var(--space-2xl);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
   border-top: 1px solid var(--border);
 }
 
@@ -608,13 +610,13 @@ strong {
 .kou-layers {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
-  margin-bottom: var(--space-xl);
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
 }
 
 .kou-layer {
   position: relative;
-  padding: var(--space-lg);
+  padding: var(--space-md);
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: var(--border-radius);
@@ -668,7 +670,7 @@ strong {
 
 .kou-insight {
   text-align: center;
-  padding: var(--space-lg);
+  padding: var(--space-md);
   background: var(--accent-soft);
   border-radius: var(--border-radius);
   border: 1px solid rgba(255, 107, 53, 0.2);
@@ -676,7 +678,7 @@ strong {
 
 .kou-insight p {
   color: var(--fg-primary);
-  font-size: 1rem;
+  font-size: 0.9rem;
   margin: 0;
 }
 
