@@ -585,6 +585,105 @@ strong {
   height: 20px;
 }
 
+/* === KOU SECTION (About Page) === */
+.kou-section {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-2xl);
+  border-top: 1px solid var(--border);
+}
+
+.kou-title {
+  text-align: center;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: var(--space-xs);
+}
+
+.kou-subtitle {
+  text-align: center;
+  color: var(--fg-muted);
+  font-size: 0.875rem;
+  margin-bottom: var(--space-xl);
+}
+
+.kou-layers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.kou-layer {
+  position: relative;
+  padding: var(--space-lg);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  transition: all var(--transition-normal);
+}
+
+.kou-layer:hover {
+  border-color: var(--border-hover);
+  transform: translateX(8px);
+}
+
+.kou-layer-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+}
+
+.kou-layer-label {
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.kou-layer-question {
+  font-size: 1rem;
+  color: var(--fg-primary);
+  font-style: italic;
+  margin-bottom: var(--space-sm);
+  padding-left: var(--space-md);
+  border-left: 2px solid var(--accent);
+}
+
+.kou-layer-desc {
+  font-size: 0.875rem;
+  color: var(--fg-secondary);
+  line-height: 1.6;
+}
+
+/* Layer-specific colors */
+.kou-layer-kernel .kou-layer-name { color: #ff6b35; }
+.kou-layer-kernel:hover { border-color: rgba(255, 107, 53, 0.3); }
+
+.kou-layer-os .kou-layer-name { color: #00d4aa; }
+.kou-layer-os:hover { border-color: rgba(0, 212, 170, 0.3); }
+
+.kou-layer-ui .kou-layer-name { color: #7c6aef; }
+.kou-layer-ui:hover { border-color: rgba(124, 106, 239, 0.3); }
+
+.kou-insight {
+  text-align: center;
+  padding: var(--space-lg);
+  background: var(--accent-soft);
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+}
+
+.kou-insight p {
+  color: var(--fg-primary);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.kou-insight strong {
+  color: var(--accent);
+}
+
 /* === LOADING STATE === */
 .loading {
   display: flex;
