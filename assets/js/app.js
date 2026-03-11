@@ -81,7 +81,16 @@ async function renderTimeline() {
   const articles = await loadArticles();
   const timeline = document.querySelector('.timeline');
 
-  if (!timeline || articles.length === 0) return;
+  if (!timeline) return;
+
+  if (articles.length === 0) {
+    timeline.innerHTML = `
+      <div class="timeline-empty">
+        <p>暂无文章</p>
+      </div>
+    `;
+    return;
+  }
 
   let html = '';
   let currentYear = null;
@@ -95,7 +104,7 @@ async function renderTimeline() {
     html += `
       <article class="timeline-item" data-slug="${article.slug}">
         <div class="timeline-item-header">
-          <span class="timeline-item-date">${article.date.slice(5)}</span>
+          <span class="timeline-item-date">${article.date ? article.date.slice(5) : ''}</span>
           ${article.tag ? `<span class="timeline-item-tag">${article.tag}</span>` : ''}
         </div>
         <h3>${article.title}</h3>
