@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!posts/|articles/|slides/|assets/).*)",
       "destination": "/index.html"
     }
   ],
