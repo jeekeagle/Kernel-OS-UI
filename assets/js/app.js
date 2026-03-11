@@ -24,33 +24,52 @@ async function loadArticles() {
   if (articlesCache) return articlesCache;
 
   try {
-    // Load posts index
-    const indexRes = await fetch('posts/posts.json');
-    const slugs = await indexRes.json();
+    const allArticles = [];
 
-    // Load each post's frontmatter
-    const articles = await Promise.all(
-      slugs.map(async slug => {
-        const res = await fetch(`posts/${slug}.md`);
-        const markdown = await res.text();
-        const meta = parseFrontmatter(markdown);
+    // Load from multiple directories
+    const sources = [
+      { dir: 'posts', index: 'posts/posts.json' },
+      { dir: 'articles', index: 'articles/articles.json' }
+    ];
 
-        return {
-          slug,
-          title: meta.title || slug,
-          date: meta.date || '',
-          tag: meta.tag || '',
-          description: meta.description || '',
-          year: meta.date ? parseInt(meta.date.split('-')[0]) : new Date().getFullYear()
-        };
-      })
-    );
+    for (const source of sources) {
+      try {
+        const indexRes = await fetch(source.index);
+        if (!indexRes.ok) continue;
+
+        const slugs = await indexRes.json();
+
+        const articles = await Promise.all(
+          slugs.map(async slug => {
+            const res = await fetch(`${source.dir}/${slug}.md`);
+            if (!res.ok) return null;
+
+            const markdown = await res.text();
+            const meta = parseFrontmatter(markdown);
+
+            return {
+              slug,
+              source: source.dir,
+              title: meta.title || slug,
+              date: meta.date || '',
+              tag: meta.tag || '',
+              description: meta.description || '',
+              year: meta.date ? parseInt(meta.date.split('-')[0]) : new Date().getFullYear()
+            };
+          })
+        );
+
+        allArticles.push(...articles.filter(Boolean));
+      } catch (e) {
+        console.warn(`Failed to load from ${source.dir}:`, e);
+      }
+    }
 
     // Sort by date descending
-    articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+    allArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    articlesCache = articles;
-    return articles;
+    articlesCache = allArticles;
+    return allArticles;
   } catch (error) {
     console.error('Failed to load articles:', error);
     return [];
@@ -174,28 +193,37 @@ const router = {
     });
     document.getElementById('page-article')?.classList.add('active');
 
-    try {
-      const response = await fetch(`posts/${slug}.md`);
-      if (!response.ok) throw new Error('Failed to load article');
+    // Try multiple directories
+    const sources = ['articles', 'posts'];
 
-      const markdown = await response.text();
-      const meta = parseFrontmatter(markdown);
+    for (const source of sources) {
+      try {
+        const response = await fetch(`${source}/${slug}.md`);
+        if (!response.ok) continue;
 
-      // Remove frontmatter from content
-      const content = markdown.replace(/^---\n[\s\S]*?\n---\n/, '');
+        const markdown = await response.text();
+        const meta = parseFrontmatter(markdown);
 
-      document.getElementById('articleTitle').textContent = meta.title || slug;
-      document.getElementById('articleDate').textContent = meta.date || '';
-      document.getElementById('articleTag').textContent = meta.tag || '';
-      document.getElementById('articleContent').innerHTML = marked.parse(content);
-    } catch (error) {
-      document.getElementById('articleContent').innerHTML = `
-        <p style="color: var(--accent);">Failed to load article: ${error.message}</p>
-        <p><a href="#/">← Back to home</a></p>
-      `;
+        // Remove frontmatter from content
+        const content = markdown.replace(/^---\n[\s\S]*?\n---\n/, '');
+
+        document.getElementById('articleTitle').textContent = meta.title || slug;
+        document.getElementById('articleDate').textContent = meta.date || '';
+        document.getElementById('articleTag').textContent = meta.tag || '';
+        document.getElementById('articleContent').innerHTML = marked.parse(content);
+
+        this.setupReadingProgress();
+        return;
+      } catch (error) {
+        continue;
+      }
     }
 
-    this.setupReadingProgress();
+    // Not found
+    document.getElementById('articleContent').innerHTML = `
+      <p style="color: var(--accent);">文章未找到</p>
+      <p><a href="#/">← 返回首页</a></p>
+    `;
   },
 
   setupNav() {
